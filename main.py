@@ -1,7 +1,8 @@
-import numpy as np
 import csv
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import sys
 
 
 # CSV file name and delimiter in CSV file
@@ -15,14 +16,14 @@ LOCATOR = mdates.MonthLocator
 X_AXIS_INTERVAL = 1
 
 
-def readCsvData(file_name):
+def readCsvData(file_name, delimiter):
     days = []
     months = []
     years = []
     hours = []
     total_days = []
     with open(file_name, 'r') as csv_file:
-        line_reader = csv.reader(csv_file, delimiter=DELIMITER)
+        line_reader = csv.reader(csv_file, delimiter=delimiter)
         for i, line in enumerate(line_reader):
             if i == 0:
                 continue
@@ -61,8 +62,19 @@ def getCumulativeHours(hours):
     return cumulative_hours
 
 
+def readCommandLineArguments():
+    csv_file_name = CSV_FILE_NAME
+    delimiter = DELIMITER
+    if len(sys.argv) > 1:
+        csv_file_name = sys.argv[1]
+    if len(sys.argv) > 2:
+        delimiter = sys.argv[2]
+    return csv_file_name, delimiter
+
+
 def main():
-    days, months, hours, total_days = readCsvData(CSV_FILE_NAME)
+    csv_file_name, delimiter = readCommandLineArguments()
+    days, months, hours, total_days = readCsvData(csv_file_name, delimiter)
     plotDataPerDay(total_days, hours, "Hours per day", "Hours")
     cumulative_hours = getCumulativeHours(hours)
     plotDataPerDay(total_days, cumulative_hours, "Cumulative hours", "Hours")
