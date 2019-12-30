@@ -14,7 +14,7 @@ The second graph shows cumulative hours in each marked day.
 
 ![Denser timeline](images/denser_timeline.png)
 
-The third graph is the same as first one but shows denser timeline which can be defined by changing the constant variables defined in the beginning of the code.
+The third graph is the same as the first one but shows denser timeline which can be defined by changing the constant variables defined in the beginning of the code.
 
 ## 2 Installation
 
@@ -24,7 +24,7 @@ The third graph is the same as first one but shows denser timeline which can be 
 
 ## 3 Running the Code
 
-The code needs to know the file name and delimiter used in CSV file. These could be changed directly inside the code or another option is to give them as command line arguments. Run the code from bash in a following way:
+The code needs to know the file name and delimiter used in a CSV file. These could be changed directly inside the code or another option is to give them as command line arguments. Run the code from bash in a following way:
 
 ```bash
 python main.py <file_name> <delimiter>
