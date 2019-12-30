@@ -23,10 +23,12 @@ def readCsvData(file_name, delimiter):
     hours = []
     progresses = []
     total_days = []
+    name_of_progress = "progress"
     with open(file_name, 'r') as csv_file:
         line_reader = csv.reader(csv_file, delimiter=delimiter)
         for i, line in enumerate(line_reader):
             if i == 0:
+                name_of_progress = line[4].lower()
                 continue
             day = line[0]
             month = line[1]
@@ -41,7 +43,7 @@ def readCsvData(file_name, delimiter):
             date = month + '/' + day + '/' + year
             total_number_of_days = mdates.datestr2num(date)
             total_days.append(total_number_of_days)
-    return days, months, hours, progresses, total_days
+    return days, months, hours, progresses, total_days, name_of_progress
 
 
 def plotDataPerDay(total_days, data, title, ylabel):
@@ -124,8 +126,8 @@ def readCommandLineArguments():
 def main():
     # Read data
     csv_file_name, delimiter = readCommandLineArguments()
-    days, months, hours, cumulative_progresses, total_days = readCsvData(
-        csv_file_name, delimiter)
+    days, months, hours, cumulative_progresses, total_days, \
+    name_of_progress = readCsvData(csv_file_name, delimiter)
     cumulative_hours = getCumulativeHours(hours)
     absolute_progresses = getAbsoluteProgresses(cumulative_progresses)
     print("Total working hours: %i" % (cumulative_hours[-1]))
@@ -135,12 +137,14 @@ def main():
     plotDataPerDay(total_days, cumulative_hours, "Cumulative hours", "Hours")
     plot2Datasets(
         total_days, hours, absolute_progresses,
-        "Working hours and absolute progresses", "Hours", "Progress",
-        "working hours", "absolute progress", absolute=True)
+        "Working hours and absolute " + name_of_progress, "Hours",
+        name_of_progress.title(), "working hours",
+        "absolute " + name_of_progress, absolute=True)
     plot2Datasets(
         total_days, hours, cumulative_progresses,
-        "Working hours and cumulative progress", "Hours", "Progress", 
-        "working hours", "cumulative progress")
+        "Working hours and cumulative " + name_of_progress, "Hours",
+        name_of_progress.title(), "working hours",
+        "cumulative " + name_of_progress)
     
 
 main()
