@@ -24,8 +24,16 @@ The third graph is the same as first one but shows denser timeline which can be 
 
 ## 3 Running the Code
 
-Run the code from bash in a following way:
+The code needs to know the file name and delimiter used in CSV file. These could be changed directly inside the code or another option is to give them as command line arguments. Run the code from bash in a following way:
 
 ```bash
+python main.py <file_name> <delimiter>
+```
+
+Examples:
+
+```bash
+python main.py work_hours.csv ,
+python main.py work_hours.csv
 python main.py
 ```
