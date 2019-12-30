@@ -16,6 +16,14 @@ The second graph shows cumulative hours in each marked day.
 
 The third graph is the same as the first one but shows denser timeline which can be defined by changing the constant variables defined in the beginning of the code.
 
+![Absolute progress](images/absolute_progress.png)
+
+The forth graph shows hours and progress made during the process. Progress could be total amount of money, savings, revenue or number of written words in thesis. By changing the "Progress" name of a cell in CSV file, that word will be used in the graph. Progress is given as a cumulative value in the CSV file, for example, the amount of money is written there, not the growth of money.
+
+![Cumulative progress](images/cumulative_progress.png)
+
+The fifth graph shows hours and cumulative progress.
+
 ## 2 Installation
 
 1. Install Python. Python 3.6 has been used during development but this should work with all Python 3 versions.
@@ -27,13 +35,19 @@ The third graph is the same as the first one but shows denser timeline which can
 The code needs to know the file name and delimiter used in a CSV file. These could be changed directly inside the code or another option is to give them as command line arguments. Run the code from bash in a following way:
 
 ```bash
-python main.py <file_name> <delimiter>
+python script.py <file_name> <delimiter>
 ```
 
 Examples:
 
 ```bash
-python main.py work_hours.csv ,
-python main.py work_hours.csv
-python main.py
+python analyze_hours.py work_hours.csv ,
+python analyze_hours.py work_hours.csv
+python analyze_hours.py
+```
+
+```bash
+python analyze_progress.py work_hours.csv ,
+python analyze_progress.py work_hours.csv
+python analyze_progress.py
 ```
