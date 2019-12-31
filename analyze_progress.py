@@ -46,9 +46,10 @@ def readCsvData(file_name, delimiter):
     return days, months, hours, progresses, total_days, name_of_progress
 
 
-def plotDataPerDay(total_days, data, title, ylabel, absolute=False):
+def plotDataPerDay(total_days, data, title, ylabel,
+                   values_can_be_negative=False):
     color = "C0"
-    if absolute:
+    if values_can_be_negative:
         color = getRedGreenColorMap(data)
         plt.plot(total_days, list(np.zeros(len(total_days))), color="black")
 
@@ -63,13 +64,14 @@ def plotDataPerDay(total_days, data, title, ylabel, absolute=False):
 
 
 def plot2Datasets(total_days, data_1, data_2, title, ylabel_1, ylabel_2,
-                  data_name_1, data_name_2, absolute=False, bar_width=0.3):
+                  data_name_1, data_name_2, values_can_be_negative=False,
+                  bar_width=0.3):
     fig = plt.figure()
     ax_1 = fig.add_subplot(111)
     ax_2 = ax_1.twinx()
 
     color = "tab:orange"
-    if absolute:
+    if values_can_be_negative:
         color = getRedGreenColorMap(data_2)
         ax_2.plot(total_days, list(np.zeros(len(total_days))), color="black")
 
@@ -152,12 +154,12 @@ def main():
     plotDataPerDay(
         total_days, progresses_per_hours,
         name_of_progress.title() + " per hours",
-        name_of_progress.title() + " / hour", absolute=True)
+        name_of_progress.title() + " / hour", values_can_be_negative=True)
     plot2Datasets(
         total_days, hours, absolute_progresses,
         "Working hours and absolute " + name_of_progress, "Hours",
         name_of_progress.title(), "working hours",
-        "absolute " + name_of_progress, absolute=True)
+        "absolute " + name_of_progress, values_can_be_negative=True)
     plot2Datasets(
         total_days, hours, cumulative_progresses,
         "Working hours and cumulative " + name_of_progress, "Hours",
