@@ -23,23 +23,23 @@ def readCsvData(file_name, delimiter):
     hours = []
     progresses = []
     total_days = []
-    name_of_progress = "progress"
+    name_of_progress = None
     with open(file_name, 'r') as csv_file:
         line_reader = csv.reader(csv_file, delimiter=delimiter)
         for i, line in enumerate(line_reader):
             if i == 0:
-                name_of_progress = line[4].lower()
+                if len(line) >= 5:
+                    name_of_progress = line[4].lower()
                 continue
             day = line[0]
             month = line[1]
             year = line[2]
-            hour = line[3]
-            progress = line[4]
             days.append(int(day))
             months.append(int(month))
             years.append(int(year))
-            hours.append(int(hour))
-            progresses.append(int(progress))
+            hours.append(int(line[3]))
+            if len(line) >= 5:
+                progresses.append(int(line[4]))
             date = month + '/' + day + '/' + year
             total_number_of_days = mdates.datestr2num(date)
             total_days.append(total_number_of_days)
@@ -143,28 +143,31 @@ def main():
     days, months, hours, cumulative_progresses, total_days, \
     name_of_progress = readCsvData(csv_file_name, delimiter)
     cumulative_hours = getCumulativeHours(hours)
-    absolute_progresses = getAbsoluteProgresses(cumulative_progresses)
-    progresses_per_hours = getAbsoluteProgressPerHours(
-        absolute_progresses, hours)
     print("Total working hours: %i" % (cumulative_hours[-1]))
 
     # Analyze data
     plotDataPerDay(total_days, hours, "Hours per day", "Hours")
     plotDataPerDay(total_days, cumulative_hours, "Cumulative hours", "Hours")
-    plotDataPerDay(
-        total_days, progresses_per_hours,
-        name_of_progress.title() + " per hours",
-        name_of_progress.title() + " / hour", values_can_be_negative=True)
-    plot2Datasets(
-        total_days, hours, absolute_progresses,
-        "Working hours and absolute " + name_of_progress, "Hours",
-        name_of_progress.title(), "working hours",
-        "absolute " + name_of_progress, values_can_be_negative=True)
-    plot2Datasets(
-        total_days, hours, cumulative_progresses,
-        "Working hours and cumulative " + name_of_progress, "Hours",
-        name_of_progress.title(), "working hours",
-        "cumulative " + name_of_progress)
+
+    # Analyze progress
+    if name_of_progress is not None:
+        absolute_progresses = getAbsoluteProgresses(cumulative_progresses)
+        progresses_per_hours = getAbsoluteProgressPerHours(
+            absolute_progresses, hours)
+        plotDataPerDay(
+            total_days, progresses_per_hours,
+            name_of_progress.title() + " per hours",
+            name_of_progress.title() + " / hour", values_can_be_negative=True)
+        plot2Datasets(
+            total_days, hours, absolute_progresses,
+            "Working hours and absolute " + name_of_progress, "Hours",
+            name_of_progress.title(), "working hours",
+            "absolute " + name_of_progress, values_can_be_negative=True)
+        plot2Datasets(
+            total_days, hours, cumulative_progresses,
+            "Working hours and cumulative " + name_of_progress, "Hours",
+            name_of_progress.title(), "working hours",
+            "cumulative " + name_of_progress)
     
 
 main()
