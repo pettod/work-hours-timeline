@@ -41,13 +41,13 @@ python script.py <file_name> <delimiter>
 Examples:
 
 ```bash
-python analyze_hours.py work_hours.csv ,
-python analyze_hours.py work_hours.csv
-python analyze_hours.py
+python analyze_work.py work_hours.csv ,
+python analyze_work.py work_hours.csv
+python analyze_work.py
 ```
 
 ```bash
-python analyze_progress.py progress.csv ,
-python analyze_progress.py progress.csv
-python analyze_progress.py
+python analyze_work.py progress.csv ,
+python analyze_work.py progress.csv
+python analyze_work.py
 ```
