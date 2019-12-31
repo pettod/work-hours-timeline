@@ -46,10 +46,15 @@ def readCsvData(file_name, delimiter):
     return days, months, hours, progresses, total_days, name_of_progress
 
 
-def plotDataPerDay(total_days, data, title, ylabel):
+def plotDataPerDay(total_days, data, title, ylabel, absolute=False):
+    color = "C0"
+    if absolute:
+        color = getRedGreenColorMap(data)
+        plt.plot(total_days, list(np.zeros(len(total_days))), color="black")
+
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
     plt.gca().xaxis.set_major_locator(LOCATOR(interval=X_AXIS_INTERVAL))
-    plt.bar(total_days, data)
+    plt.bar(total_days, data, color=color)
     plt.gcf().autofmt_xdate()
     plt.xlabel("Date")
     plt.ylabel(ylabel)
@@ -63,17 +68,10 @@ def plot2Datasets(total_days, data_1, data_2, title, ylabel_1, ylabel_2,
     ax_1 = fig.add_subplot(111)
     ax_2 = ax_1.twinx()
 
+    color = "tab:orange"
     if absolute:
-        color_map = []
-        for value in data_2:
-            if value < 0:
-                color_map.append('r')
-            else:
-                color_map.append('g')
-        color = tuple(color_map)
+        color = getRedGreenColorMap(data_2)
         ax_2.plot(total_days, list(np.zeros(len(total_days))), color="black")
-    else:
-        color = "tab:orange"
 
     indices_1 = list(np.array(total_days) - bar_width / 2)
     indices_2 = list(np.array(total_days) + bar_width / 2)
@@ -91,6 +89,16 @@ def plot2Datasets(total_days, data_1, data_2, title, ylabel_1, ylabel_2,
     ax_1.set_xlabel("Date")
     plt.title(title)
     plt.show()
+
+
+def getRedGreenColorMap(data):
+    color_map = []
+    for value in data:
+        if value < 0:
+            color_map.append('r')
+        else:
+            color_map.append('g')
+    return tuple(color_map)
 
 
 def getCumulativeHours(hours):
@@ -113,6 +121,10 @@ def getAbsoluteProgresses(cumulative_progresses):
     return absolute_progresses
 
 
+def getAbsoluteProgressPerHours(absolute_progresses, hours):
+    return list(np.array(absolute_progresses) / np.array(hours))
+
+
 def readCommandLineArguments():
     csv_file_name = CSV_FILE_NAME
     delimiter = DELIMITER
@@ -130,11 +142,17 @@ def main():
     name_of_progress = readCsvData(csv_file_name, delimiter)
     cumulative_hours = getCumulativeHours(hours)
     absolute_progresses = getAbsoluteProgresses(cumulative_progresses)
+    progresses_per_hours = getAbsoluteProgressPerHours(
+        absolute_progresses, hours)
     print("Total working hours: %i" % (cumulative_hours[-1]))
 
     # Analyze data
     plotDataPerDay(total_days, hours, "Hours per day", "Hours")
     plotDataPerDay(total_days, cumulative_hours, "Cumulative hours", "Hours")
+    plotDataPerDay(
+        total_days, progresses_per_hours,
+        name_of_progress.title() + " per hours",
+        name_of_progress.title() + " / hour", absolute=True)
     plot2Datasets(
         total_days, hours, absolute_progresses,
         "Working hours and absolute " + name_of_progress, "Hours",
