@@ -47,7 +47,7 @@ python analyze_hours.py
 ```
 
 ```bash
-python analyze_progress.py work_hours.csv ,
-python analyze_progress.py work_hours.csv
+python analyze_progress.py progress.csv ,
+python analyze_progress.py progress.csv
 python analyze_progress.py
 ```
