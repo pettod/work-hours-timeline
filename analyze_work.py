@@ -37,9 +37,9 @@ def readCsvData(file_name, delimiter):
             days.append(int(day))
             months.append(int(month))
             years.append(int(year))
-            hours.append(int(line[3]))
+            hours.append(float(line[3]))
             if len(line) >= 5:
-                progresses.append(int(line[4]))
+                progresses.append(float(line[4]))
             date = month + '/' + day + '/' + year
             total_number_of_days = mdates.datestr2num(date)
             total_days.append(total_number_of_days)
