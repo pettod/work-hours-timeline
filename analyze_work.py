@@ -52,6 +52,12 @@ def plotDataPerDay(total_days, data, title, ylabel,
     if values_can_be_negative:
         color = getRedGreenColorMap(data)
         plt.plot(total_days, list(np.zeros(len(total_days))), color="black")
+        data_array = np.array(data)
+        indices_of_nonzeros = np.where(data_array != 0.0)[0]
+        filtered_total_days = list(np.delete(
+            np.array(total_days), indices_of_nonzeros))
+        filtered_data = list(data_array[data_array == 0.0])
+        plt.plot(filtered_total_days, filtered_data, "ro")
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
     plt.gca().xaxis.set_major_locator(LOCATOR(interval=X_AXIS_INTERVAL))
