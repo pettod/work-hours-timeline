@@ -160,6 +160,8 @@ def main():
         absolute_progresses = getAbsoluteProgresses(cumulative_progresses)
         progresses_per_hours = getAbsoluteProgressPerHours(
             absolute_progresses, hours)
+        average_efficiency = cumulative_progresses[-1] / cumulative_hours[-1]
+        print("Average efficiency:", average_efficiency)
         plotDataPerDay(
             total_days, progresses_per_hours,
             name_of_progress.title() + " per hours",
@@ -173,6 +175,11 @@ def main():
             total_days, hours, cumulative_progresses,
             "Working hours and cumulative " + name_of_progress, "Hours",
             name_of_progress.title(), "working hours",
+            "cumulative " + name_of_progress)
+        plot2Datasets(
+            total_days, cumulative_hours, cumulative_progresses,
+            "Cumulative working hours and cumulative " + name_of_progress,
+            "Hours", name_of_progress.title(), "working hours",
             "cumulative " + name_of_progress)
     
 
