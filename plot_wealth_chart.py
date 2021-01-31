@@ -12,8 +12,7 @@ DELIMITER = ','
 # Date format e.g. 31.12.2019 or 12/31/2019
 # Set how often the date is shown in x-axis, can use mdates.DayLocator
 DATE_FORMAT = "%Y"
-LOCATOR = mdates.MonthLocator 
-X_AXIS_INTERVAL = 12
+LOCATOR = mdates.YearLocator
 
 
 def readCsvData(file_name, delimiter):
@@ -44,7 +43,7 @@ def readCsvData(file_name, delimiter):
 
 def plotDataPerDay(total_days, datas, labels, title, ylabel):
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
-    plt.gca().xaxis.set_major_locator(LOCATOR(interval=X_AXIS_INTERVAL))
+    plt.gca().xaxis.set_major_locator(LOCATOR())
     for data, label in zip(datas, labels):
         plt.plot(total_days, data, label=label)
     plt.legend()
