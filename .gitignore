@@ -1,3 +1,5 @@
 *.json
 equity.py
 *.csv
+*.png
+*.pyc

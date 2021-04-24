@@ -182,5 +182,5 @@ def main():
             "Hours", name_of_progress.title(), "working hours",
             "cumulative " + name_of_progress)
     
-
-main()
+if __name__ == "__main__":
+    main()
