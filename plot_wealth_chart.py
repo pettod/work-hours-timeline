@@ -116,6 +116,19 @@ def percentageYearlyGrowth(year_values, skip_keys, equity_comparison_keys=[]):
     return percentage_yearly_growth
 
 
+def absoluteYearlyGrowth(year_values, skip_keys):
+    absolute_yearly_growth = {}
+    for key in year_values.keys():
+        if key in skip_keys:
+            continue
+        growths = []
+        for i in range(1, len(year_values[key])):
+            growths.append(year_values[key][i] - year_values[key][i-1])
+        absolute_yearly_growth[key] = growths
+    absolute_yearly_growth["years"] = year_values["years"][1:].copy()
+    return absolute_yearly_growth
+
+
 def getRedGreenColorMap(data):
     color_map = []
     for value in data:
@@ -135,12 +148,37 @@ def plotBarChart(x, y, title, show=True):
         plt.show()
 
 
+def plot2Datasets(x, data_1, data_2, title, ylabel_1, ylabel_2,
+                  data_name_1, data_name_2, values_can_be_negative=True,
+                  bar_width=0.3):
+    fig = plt.figure()
+    ax_1 = fig.add_subplot(111)
+
+    color = "tab:orange"
+    if values_can_be_negative:
+        color = getRedGreenColorMap(data_2)
+        ax_1.plot(x, list(np.zeros(len(x))), color="black")
+
+    indices_1 = list(np.array(x) - bar_width / 2)
+    indices_2 = list(np.array(x) + bar_width / 2)
+    bar_1 = ax_1.bar(indices_1, data_1, bar_width, label=data_name_1)
+    ax_1.set_ylabel(ylabel_1)
+    bar_2 = ax_1.bar(
+        indices_2, data_2, bar_width, label=data_name_2, color=color)
+
+    fig.legend()
+    ax_1.set_xlabel("Year")
+    plt.title(title)
+    plt.show()
+
+
 def main():
     # Read data
     csv_file_name, delimiter = readCommandLineArguments()
     date_values, year_values = readCsvData(csv_file_name, delimiter)
     percentage_yearly_growth = percentageYearlyGrowth(
         year_values, ["years", "stock_profits"], ["stock_profits", "savings"])
+    absolute_yearly_growth = absoluteYearlyGrowth(year_values, ["years"])
 
     # Plot data
     plotDataPerDay(
@@ -171,6 +209,11 @@ def main():
         plt.subplot(grid_x, grid_y, i+1)
         plotBarChart(percentage_yearly_growth["years"], y[i], titles[i], False)
     plt.show()
+
+    plot2Datasets(
+        absolute_yearly_growth["years"], absolute_yearly_growth["savings"],
+        absolute_yearly_growth["stock_profits"], "Savings VS stock profits",
+        "€", "€", "Savings", "Stock profits")
 
 
 main()
